@@ -3,26 +3,36 @@ import User from "../model/user.model";
 
 export const getAllUserController = async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
-    res
-      .status(200)
-      .json({ status: 200, message: "User data successfulll", data: users });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({
+    const allUsers = await User.find();
+    return res.status(200).json({
+      status: 200,
+      message: "User data retrieved successfully",
+      data: allUsers,
+    });
+  } catch (err: any) {
+    console.error(err.message);
+    return res.status(500).json({
       status: 500,
-      message: "Someting went wroung",
-      error: err,
+      message: "Something went wrong",
+      error: err.message,
     });
   }
 };
 
 export const getUserController = async (req: Request, res: Response) => {
   try {
-    const userObj = await User.findById(req.params.userId);
-    res
-      .status(200)
-      .json({ status: 200, message: "User data successfulll", data: userObj });
+    const userData = await User.findById(req.params.userId);
+    if (userData) {
+      return res.status(200).json({
+        status: 200,
+        message: "User data successfulll",
+        data: userData,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: "User not found",
+    });
   } catch (err) {
     console.log({ err });
     res.status(500).json({
@@ -33,55 +43,50 @@ export const getUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const createUserController = (req: Request, res: Response) => {
+export const createUserController = async (req: Request, res: Response) => {
   try {
-    const instance = new User(req.body);
-    // @ts-ignore
-    instance
-      .save()
-      .then((data: any) => {
-        res.status(200).json({
-          status: 200,
-          message: "i am created user Controller",
-          data,
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          status: 400,
-          message: "Someting went wroung",
-          error: err,
-        });
-      });
-  } catch (err) {
-    console.log({ err });
+    const user = new User(req.body);
+    const savedUser = await user.save();
+
+    res.status(200).json({
+      status: 200,
+      message: "User created successfully",
+      data: savedUser,
+    });
+  } catch (err: any) {
+    console.error(err);
     res.status(500).json({
       status: 500,
-      message: "Someting went wroung",
-      error: err,
+      message: "Something went wrong",
+      error: err.message,
     });
   }
 };
 
 export const updateUserController = async (req: Request, res: Response) => {
   try {
-    const doc = await User.findOneAndUpdate(
+    const updatedUser = await User.findOneAndUpdate(
       { _id: req.params.userId },
       req.body,
       { new: true }
     );
-
-    res.status(200).json({
-      status: 200,
-      message: "User data updated successfull",
-      data: doc,
+    if (updatedUser) {
+      return res.status(200).json({
+        status: 200,
+        message: "User data updated successfull",
+        data: updatedUser,
+      });
+    }
+    return res.status(404).json({
+      status: 404,
+      message: "User not found",
     });
-  } catch (err) {
-    console.log({ err });
+  } catch (err: any) {
+    console.error(err.message);
     res.status(500).json({
       status: 500,
-      message: "Someting went wroung",
-      error: err,
+      message: "Something went wrong",
+      error: err.message,
     });
   }
 };

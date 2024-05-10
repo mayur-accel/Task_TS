@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
+import Category from "../model/category.model";
 import Post from "../model/post.model";
+import User from "../model/user.model";
 
 export const getAllPostController = async (req: Request, res: Response) => {
   try {
@@ -33,26 +35,51 @@ export const getPostController = async (req: Request, res: Response) => {
   }
 };
 
-export const createPostController = (req: Request, res: Response) => {
+export const createPostController = async (req: Request, res: Response) => {
   try {
-    const instance = new Post(req.body);
-    // @ts-ignore
-    instance
-      .save()
-      .then((data: any) => {
-        res.status(200).json({
-          status: 200,
-          message: "Post data successfull created",
-          data,
-        });
-      })
-      .catch((err) => {
-        res.status(400).json({
-          status: 400,
-          message: "Someting went wroung",
-          error: err,
-        });
-      });
+    if (req.body.userId) {
+      const userData = await User.findById(req.body.userId);
+      if (!userData) {
+        return res
+          .status(404)
+          .json({ status: 404, message: "User id not found" });
+      }
+
+      if (req.body.categoryId) {
+        const categoryData = await Category.findById(req.body.categoryId);
+        if (!categoryData) {
+          return res
+            .status(404)
+            .json({ status: 404, message: "Category id not found" });
+        }
+
+        const instance = new Post(req.body);
+        instance
+          .save()
+          .then((data: any) => {
+            res.status(200).json({
+              status: 200,
+              message: "Post data successfull created",
+              data,
+            });
+          })
+          .catch((err) => {
+            res.status(400).json({
+              status: 400,
+              message: "Someting went wroung",
+              error: err,
+            });
+          });
+      } else {
+        return res
+          .status(404)
+          .json({ status: 404, message: "Category id is missing" });
+      }
+    } else {
+      return res
+        .status(404)
+        .json({ status: 404, message: "User id is missing" });
+    }
   } catch (err) {
     console.log({ err });
     res.status(500).json({
