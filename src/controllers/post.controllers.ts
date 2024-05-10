@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { User } from "../model/user.model";
+import { Post } from "../model/post.model";
 
-export const getAllUserController = async (req: Request, res: Response) => {
+export const getAllPostController = async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
+    const postData = await Post.find();
     res
       .status(200)
-      .json({ status: 200, message: "User data successfulll", data: users });
+      .json({ status: 200, message: "Post data successfulll", data: postData });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -17,12 +17,12 @@ export const getAllUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserController = async (req: Request, res: Response) => {
+export const getPostController = async (req: Request, res: Response) => {
   try {
-    const userObj = await User.findById(req.params.userId);
+    const postData = await Post.findById(req.params.postId);
     res
       .status(200)
-      .json({ status: 200, message: "User data successfulll", data: userObj });
+      .json({ status: 200, message: "Post data successfulll", data: postData });
   } catch (err) {
     console.log({ err });
     res.status(500).json({
@@ -33,16 +33,16 @@ export const getUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const createUserController = (req: Request, res: Response) => {
+export const createPostController = (req: Request, res: Response) => {
   try {
-    const instance = new User(req.body);
+    const instance = new Post(req.body);
     // @ts-ignore
     instance
       .save()
       .then((data: any) => {
         res.status(200).json({
           status: 200,
-          message: "i am created user Controller",
+          message: "Post data successfull created",
           data,
         });
       })
@@ -63,17 +63,17 @@ export const createUserController = (req: Request, res: Response) => {
   }
 };
 
-export const updateUserController = async (req: Request, res: Response) => {
+export const updatePostController = async (req: Request, res: Response) => {
   try {
-    const doc = await User.findOneAndUpdate(
-      { _id: req.params.userId },
+    const doc = await Post.findOneAndUpdate(
+      { _id: req.params.postId },
       req.body,
       { new: true }
     );
 
     res.status(200).json({
       status: 200,
-      message: "User data updated successfull",
+      message: "Post data updated successfull",
       data: doc,
     });
   } catch (err) {
@@ -86,22 +86,22 @@ export const updateUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUserController = async (req: Request, res: Response) => {
+export const deletePostController = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-    const deletedUser = await User.findOneAndDelete({ _id: userId });
+    const { postId } = req.params;
+    const deletedPost = await Post.findOneAndDelete({ _id: postId });
 
-    if (!deletedUser) {
+    if (!deletedPost) {
       return res.status(404).json({
         status: 404,
-        message: "User not found",
+        message: "Post not found",
       });
     }
 
     return res.status(200).json({
       status: 200,
-      message: "User deleted successfully",
-      data: deletedUser,
+      message: "Post deleted successfully",
+      data: deletedPost,
     });
   } catch (error: any) {
     console.error("Error deleting user:", error);

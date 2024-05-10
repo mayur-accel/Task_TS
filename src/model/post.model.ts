@@ -22,10 +22,12 @@ export const postkSchema = new Schema(
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
+      requried: true,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
+      requried: true,
     },
   },
   { timestamps: true }

@@ -1,29 +1,22 @@
 import { Router } from "express";
+import {
+  createPostController,
+  deletePostController,
+  getAllPostController,
+  getPostController,
+  updatePostController,
+} from "../../controllers/post.controllers";
 
 const PostRouter = Router();
 
-PostRouter.get("/", (req, res) => {
-  res.status(200).json({
-    message: "I am get request on Post router",
-  });
-});
+PostRouter.get("/", getAllPostController);
 
-PostRouter.post("/", (req, res) => {
-  res.status(200).json({
-    message: "I am post request on Post router",
-  });
-});
+PostRouter.get("/:postId", getPostController);
 
-PostRouter.put("/", (req, res) => {
-  res.status(200).json({
-    message: "I am put request on Post router",
-  });
-});
+PostRouter.post("/", createPostController);
 
-PostRouter.delete("/", (req, res) => {
-  res.status(200).json({
-    message: "I am delete request on Post router",
-  });
-});
+PostRouter.patch("/:postId", updatePostController);
+
+PostRouter.delete("/:postId", deletePostController);
 
 export default PostRouter;

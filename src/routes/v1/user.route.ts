@@ -1,29 +1,22 @@
 import { Router } from "express";
+import {
+  createUserController,
+  deleteUserController,
+  getAllUserController,
+  getUserController,
+  updateUserController,
+} from "../../controllers/user.controllers";
 
 const UserRouter = Router();
 
-UserRouter.get("/", (req, res) => {
-  res.status(200).json({
-    message: "I am get request on User router",
-  });
-});
+UserRouter.get("/", getAllUserController);
 
-UserRouter.post("/", (req, res) => {
-  res.status(200).json({
-    message: "I am post request on User router",
-  });
-});
+UserRouter.post("/", createUserController);
 
-UserRouter.put("/", (req, res) => {
-  res.status(200).json({
-    message: "I am put request on User router",
-  });
-});
+UserRouter.get("/:userId", getUserController);
 
-UserRouter.delete("/", (req, res) => {
-  res.status(200).json({
-    message: "I am delete request on User router",
-  });
-});
+UserRouter.patch("/:userId", updateUserController);
+
+UserRouter.delete("/:userId", deleteUserController);
 
 export default UserRouter;

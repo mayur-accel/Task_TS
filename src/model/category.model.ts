@@ -9,7 +9,7 @@ export const categorykSchema = new Schema(
     },
     status: {
       type: Boolean,
-      requried: true,
+      required: true,
       default: true,
     },
   },

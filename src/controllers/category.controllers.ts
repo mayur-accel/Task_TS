@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
-import { User } from "../model/user.model";
+import { Category } from "../model/category.model";
 
-export const getAllUserController = async (req: Request, res: Response) => {
+export const getAllCategoryController = async (req: Request, res: Response) => {
   try {
-    const users = await User.find();
-    res
-      .status(200)
-      .json({ status: 200, message: "User data successfulll", data: users });
+    const categoryData = await Category.find();
+    res.status(200).json({
+      status: 200,
+      message: "Category Data successfulll",
+      total: categoryData.length,
+      data: categoryData,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
@@ -17,12 +20,14 @@ export const getAllUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const getUserController = async (req: Request, res: Response) => {
+export const getCategoryController = async (req: Request, res: Response) => {
   try {
-    const userObj = await User.findById(req.params.userId);
-    res
-      .status(200)
-      .json({ status: 200, message: "User data successfulll", data: userObj });
+    const categoryData = await Category.findById(req.params.categoryId);
+    res.status(200).json({
+      status: 200,
+      message: "Category data successfulll",
+      data: categoryData,
+    });
   } catch (err) {
     console.log({ err });
     res.status(500).json({
@@ -33,16 +38,16 @@ export const getUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const createUserController = (req: Request, res: Response) => {
+export const createCategoryController = (req: Request, res: Response) => {
   try {
-    const instance = new User(req.body);
+    const instance = new Category(req.body);
     // @ts-ignore
     instance
       .save()
       .then((data: any) => {
         res.status(200).json({
           status: 200,
-          message: "i am created user Controller",
+          message: "Category data create successfull",
           data,
         });
       })
@@ -63,17 +68,17 @@ export const createUserController = (req: Request, res: Response) => {
   }
 };
 
-export const updateUserController = async (req: Request, res: Response) => {
+export const updateCategoryController = async (req: Request, res: Response) => {
   try {
-    const doc = await User.findOneAndUpdate(
-      { _id: req.params.userId },
+    const doc = await Category.findOneAndUpdate(
+      { _id: req.params.categoryId },
       req.body,
       { new: true }
     );
 
     res.status(200).json({
       status: 200,
-      message: "User data updated successfull",
+      message: "Category data updated successfull",
       data: doc,
     });
   } catch (err) {
@@ -86,22 +91,24 @@ export const updateUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const deleteUserController = async (req: Request, res: Response) => {
+export const deleteCategoryController = async (req: Request, res: Response) => {
   try {
-    const { userId } = req.params;
-    const deletedUser = await User.findOneAndDelete({ _id: userId });
+    const { categoryId } = req.params;
+    const deletedCategory = await Category.findOneAndDelete({
+      _id: categoryId,
+    });
 
-    if (!deletedUser) {
+    if (!deletedCategory) {
       return res.status(404).json({
         status: 404,
-        message: "User not found",
+        message: "Category not found",
       });
     }
 
     return res.status(200).json({
       status: 200,
-      message: "User deleted successfully",
-      data: deletedUser,
+      message: "Category deleted successfully",
+      data: deletedCategory,
     });
   } catch (error: any) {
     console.error("Error deleting user:", error);
