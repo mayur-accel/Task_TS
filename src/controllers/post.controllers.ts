@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { Post } from "../model/post.model";
+import Post from "../model/post.model";
 
 export const getAllPostController = async (req: Request, res: Response) => {
   try {

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-export const postkSchema = new Schema(
+const postSchema = new Schema(
   {
     title: {
       type: String,
@@ -12,25 +12,28 @@ export const postkSchema = new Schema(
     },
     status: {
       type: Boolean,
-      require: true,
+      required: true,
       default: true,
     },
-    postCreatedAt: {
+    createdAt: {
       type: Date,
       required: true,
+      default: Date.now,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      requried: true,
+      required: true,
     },
     categoryId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category",
-      requried: true,
+      required: true,
     },
   },
   { timestamps: true }
 );
 
-export const Post = mongoose.model("Post", postkSchema);
+const Post = mongoose.model("Post", postSchema);
+
+export default Post;
