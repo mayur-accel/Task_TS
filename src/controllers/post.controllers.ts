@@ -5,10 +5,41 @@ import User from "../model/user.model";
 
 export const getAllPostController = async (req: Request, res: Response) => {
   try {
-    const postData = await Post.find();
-    res
-      .status(200)
-      .json({ status: 200, message: "Post data successfulll", data: postData });
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 3;
+    const sortOrder = req.query.sortOrder || "asc";
+    const skip = (page - 1) * limit;
+
+    let filter: any = {};
+    if (req.query.status) {
+      filter.status = req.query.status;
+    }
+
+    const sortOptions: any = {};
+    sortOptions["createdAt"] = -1;
+
+    const postData = await Post.find(filter)
+      .skip(skip)
+      .limit(limit)
+      .sort([["createdAt", "descending"]]);
+    const totalPost = await Post.countDocuments(filter);
+    const totalPages = Math.ceil(totalPost / limit);
+
+    if (page > totalPages) {
+      return res.status(404).json({
+        status: 404,
+        message: "Post page not found",
+      });
+    }
+
+    return res.status(200).json({
+      status: 200,
+      message: "Post data successfulll",
+      page,
+      limit,
+      totalPost,
+      data: postData,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
