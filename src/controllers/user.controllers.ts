@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import User from "../model/user.model";
 
 export const getAllUserController = async (req: Request, res: Response) => {
@@ -65,7 +65,11 @@ export const getUserController = async (req: Request, res: Response) => {
   }
 };
 
-export const createUserController = async (req: Request, res: Response) => {
+export const createUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const user = new User(req.body);
     const savedUser = await user.save();
@@ -77,11 +81,12 @@ export const createUserController = async (req: Request, res: Response) => {
     });
   } catch (err: any) {
     console.error(err);
-    res.status(500).json({
-      status: 500,
-      message: "Something went wrong",
-      error: err.message,
-    });
+    // res.status(500).json({
+    //   status: 500,
+    //   message: "Something went wrong",
+    //   error: err.message,
+    // });
+    next(err);
   }
 };
 

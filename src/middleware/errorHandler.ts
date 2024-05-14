@@ -9,6 +9,7 @@ export const errorHandler = (
   const statuCode = res.statusCode !== 200 ? res.statusCode : 500;
   res.status(statuCode);
   const responseBody = {
+    status: statuCode,
     message: err.message,
     stack: err.stack,
   };

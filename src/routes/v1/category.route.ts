@@ -1,7 +1,9 @@
 import { Router } from "express";
+import { asyncMiddleware } from "../../../utils/asyncMiddleware";
 import {
   createCategoryController,
   deleteCategoryController,
+  getAggregate,
   getAllCategoryController,
   getCategoryController,
   updateCategoryController,
@@ -9,14 +11,16 @@ import {
 
 const CategoryRoute = Router();
 
-CategoryRoute.get("/", getAllCategoryController);
+CategoryRoute.get("/", asyncMiddleware(getAllCategoryController));
 
-CategoryRoute.get("/:categoryId", getCategoryController);
+CategoryRoute.get("/aggregate", asyncMiddleware(getAggregate));
 
-CategoryRoute.post("/", createCategoryController);
+CategoryRoute.get("/:categoryId", asyncMiddleware(getCategoryController));
 
-CategoryRoute.patch("/:categoryId", updateCategoryController);
+CategoryRoute.post("/", asyncMiddleware(createCategoryController));
 
-CategoryRoute.delete("/:categoryId", deleteCategoryController);
+CategoryRoute.patch("/:categoryId", asyncMiddleware(updateCategoryController));
+
+CategoryRoute.delete("/:categoryId", asyncMiddleware(deleteCategoryController));
 
 export default CategoryRoute;
