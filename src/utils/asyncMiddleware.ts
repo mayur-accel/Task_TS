@@ -1,15 +1,18 @@
 import { NextFunction, Request, Response } from "express";
 
-export const asyncMiddleware = (
-  handler: (req: Request, res: Response, next: NextFunction) => Promise<any>
-) => {
+type AsyncHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => Promise<any>;
+
+export const asyncMiddleware = (handler: AsyncHandler) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
       await handler(req, res, next);
-    } catch (error) {
-      console.error("Async Error:", error);
+    } catch (error: any) {
+      console.error(`Async Error: ${error.message}`, { stack: error.stack });
       next(error);
-      // res.status(500).json({ error: "Internal server error" });
     }
   };
 };

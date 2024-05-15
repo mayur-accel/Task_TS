@@ -6,13 +6,23 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  const statuCode = res.statusCode !== 200 ? res.statusCode : 500;
-  res.status(statuCode);
-  const responseBody = {
-    status: statuCode,
+  const statusCode = res.statusCode !== 200 ? res.statusCode : 500;
+
+  res.status(statusCode);
+
+  const responseBody: any = {
+    status: statusCode,
     message: err.message,
-    stack: err.stack,
   };
+
+  // Include stack trace only in development mode
+  if (process.env.NODE_ENV === "development") {
+    responseBody.stack = err.stack;
+  }
+
+  // Log the error
   console.log("Error:", responseBody);
+
+  // Send the response
   res.json(responseBody);
 };
