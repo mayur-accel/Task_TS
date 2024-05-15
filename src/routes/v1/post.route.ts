@@ -4,19 +4,23 @@ import {
   deletePostController,
   getAllPostController,
   getPostController,
+  getUserActivePostController,
   updatePostController,
 } from "../../controllers/post.controllers";
+import { asyncMiddleware } from "../../utils/asyncMiddleware";
 
 const PostRouter = Router();
 
-PostRouter.get("/", getAllPostController);
+PostRouter.get("/", asyncMiddleware(getAllPostController));
 
-PostRouter.get("/:postId", getPostController);
+PostRouter.get("/:postId", asyncMiddleware(getPostController));
 
-PostRouter.post("/", createPostController);
+PostRouter.post("/", asyncMiddleware(createPostController));
 
-PostRouter.patch("/:postId", updatePostController);
+PostRouter.patch("/:postId", asyncMiddleware(updatePostController));
 
-PostRouter.delete("/:postId", deletePostController);
+PostRouter.delete("/:postId", asyncMiddleware(deletePostController));
+
+PostRouter.get("/active/user", asyncMiddleware(getUserActivePostController));
 
 export default PostRouter;

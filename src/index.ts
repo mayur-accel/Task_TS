@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
 import express from "express";
+import morgan from "morgan";
 import { DatabaseConnetion } from "./DB/DBConnection";
 import { errorHandler } from "./middleware/errorHandler";
 import RootRouter from "./routes/root.route";
@@ -9,6 +10,7 @@ const app = express();
 
 DatabaseConnetion();
 
+app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/api/v1", RootRouter);

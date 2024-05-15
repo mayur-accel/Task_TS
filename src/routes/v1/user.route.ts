@@ -6,17 +6,18 @@ import {
   getUserController,
   updateUserController,
 } from "../../controllers/user.controllers";
+import { asyncMiddleware } from "../../utils/asyncMiddleware";
 
 const UserRouter = Router();
 
-UserRouter.get("/", getAllUserController);
+UserRouter.get("/", asyncMiddleware(getAllUserController));
 
-UserRouter.post("/", createUserController);
+UserRouter.post("/", asyncMiddleware(createUserController));
 
-UserRouter.get("/:userId", getUserController);
+UserRouter.get("/:userId", asyncMiddleware(getUserController));
 
-UserRouter.patch("/:userId", updateUserController);
+UserRouter.patch("/:userId", asyncMiddleware(updateUserController));
 
-UserRouter.delete("/:userId", deleteUserController);
+UserRouter.delete("/:userId", asyncMiddleware(deleteUserController));
 
 export default UserRouter;
