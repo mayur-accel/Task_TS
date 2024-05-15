@@ -9,12 +9,13 @@ dotenv.config();
 
 const app = express();
 
-// DatabaseConnetion();
 connectDatabase();
 
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
+app.use(express.static("public/my-uploads"));
 app.use("/api/v1", RootRouter);
 
 // Error Handling Middleware
