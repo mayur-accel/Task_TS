@@ -2,6 +2,7 @@ import { Router } from "express";
 import multer from "multer";
 import {
   createUserController,
+  creteNoteController,
   deleteUserController,
   getAllUserController,
   getUserController,
@@ -31,5 +32,7 @@ UserRouter.patch(
 );
 
 UserRouter.delete("/:userId", asyncMiddleware(deleteUserController));
+
+UserRouter.post("/note/:userId", asyncMiddleware(creteNoteController));
 
 export default UserRouter;

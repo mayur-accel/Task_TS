@@ -191,3 +191,18 @@ export const deleteUserController = async (req: Request, res: Response) => {
     data: deletedUser,
   });
 };
+
+export const creteNoteController = async (req: Request, res: Response) => {
+  const userData = await User.findById({ _id: req.params.userId });
+  if (!userData) {
+    return res.status(404).json({
+      status: 404,
+      message: "User not found",
+    });
+  }
+
+  return res.status(200).json({
+    status: 200,
+    message: "not created",
+  });
+};
