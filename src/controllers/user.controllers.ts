@@ -58,7 +58,6 @@ const ensureUploadsDirExists = (userId: string) => {
 };
 
 export const createUserController = async (req: Request, res: Response) => {
-  console.log(req.body);
   const user = new User(req.body);
   const savedUser = await user.save();
 
